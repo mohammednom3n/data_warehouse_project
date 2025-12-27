@@ -209,10 +209,6 @@ __marimo__/
 # IDE project files
 .idea/
 
-# Processed data
-data/processed/
-
-
 # Jupyter notebook checkpoints
 *.ipynb_checkpoints/
 
