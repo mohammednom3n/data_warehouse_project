@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS silver.crm_prd_info (
 -- CRM SALES
 
 CREATE TABLE IF NOT EXISTS silver.crm_sales_details (
-    order_number TEXT PRIMARY KEY,
+    order_number TEXT,
     product_key TEXT,
     customer_id INT,
     order_date DATE,
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS silver.erp_cust_az12 (
 -- ERP CUSTOMER'S LOCATION
 
 CREATE TABLE IF NOT EXISTS silver.erp_loc_a101 (
-    customer_key INT PRIMARY KEY,
+    customer_key TEXT PRIMARY KEY,
     country TEXT,
     dwh_create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
