@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS silver.crm_cust_info (
 
 CREATE TABLE IF NOT EXISTS silver.crm_prd_info (
     product_id INT PRIMARY KEY,
+    category_key TEXT,
     product_key TEXT,
     product_name TEXT,
     product_cost NUMERIC,
@@ -88,7 +89,7 @@ CREATE TABLE IF NOT EXISTS silver.crm_sales_details (
 
 CREATE TABLE IF NOT EXISTS silver.erp_cust_az12 (
     customer_key TEXT PRIMARY KEY,
-    birth_date TEXT,
+    birth_date DATE,
     gender TEXT,
     dwh_create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -104,7 +105,7 @@ CREATE TABLE IF NOT EXISTS silver.erp_loc_a101 (
 -- ERP PRODUCTS INFO
 
 CREATE TABLE IF NOT EXISTS silver.erp_px_cat_g1v2 (
-    product_category_key TEXT PRIMARY KEY,
+    category_key TEXT PRIMARY KEY,
     category TEXT,
     subcategory TEXT,
     maintenance TEXT,

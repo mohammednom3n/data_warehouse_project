@@ -145,8 +145,11 @@ WITH product_data AS (
         prd_id::INT,
     
     -- TRIM leading/trailing space
-        TRIM(prd_key) AS product_key,
+        TRIM(REPLACE(SUBSTRING(prd_key, 1, 5), '-', '_')) AS category_key,
+        TRIM(SUBSTRING(prd_key, 7, LENGTH(prd_key) )) AS product_key,
         TRIM(prd_nm) AS product_name,
+        -- LEFT(): selects the first 5 characters
+        -- REPLACE(): changes '-' to '_'
     
     -- Replace NULL/invalid costs with 0
         COALESCE(NULLIF(TRIM(prd_cost), '')::NUMERIC, 0) AS product_cost,
@@ -175,6 +178,7 @@ WITH product_data AS (
 
 INSERT INTO silver.crm_prd_info(
     product_id,
+    category_key,
     product_key,
     product_name,
     product_cost,
@@ -185,6 +189,7 @@ INSERT INTO silver.crm_prd_info(
 
 SELECT
     prd_id,
+    category_key,
     product_key,
     product_name,
     product_cost,
@@ -342,7 +347,7 @@ WITH location_data AS (
 
     SELECT
         -- Clean customer key
-        TRIM(cid) AS customer_key,
+        TRIM(REPLACE(cid, '-', '')) AS customer_key,
 
         -- Standardize country names and abbreviations
         CASE
@@ -380,7 +385,7 @@ TRUNCATE TABLE silver.erp_px_cat_g1v2;
 WITH category_data AS (
 
     SELECT
-        id AS category_id,
+        id AS category_key,
         cat AS category,
         subcat AS subcategory,
         maintenance
@@ -389,14 +394,14 @@ WITH category_data AS (
 )
 
 INSERT INTO silver.erp_px_cat_g1v2 (
-    product_category_key,
+    category_key,
     category,
     subcategory,
     maintenance
 )
 
 SELECT
-    category_id,
+    category_key,
     category,
     subcategory,
     maintenance
