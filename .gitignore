@@ -216,3 +216,9 @@ catboost_info/
 .ipynb_checkpoints/
 venv/
 datasets/
+
+# VS Code
+.vscode/
+
+# Draw.io backups
+*.bkp
