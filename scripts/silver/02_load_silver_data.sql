@@ -82,7 +82,7 @@ WITH ranked_customers AS (
     -- Standardize marital status
         CASE
             WHEN UPPER(TRIM(cst_marital_status)) = 'S' THEN 'Single'
-            WHEN UPPER(TRIM(cst_marital_status)) = 'M' THEN 'Maried'
+            WHEN UPPER(TRIM(cst_marital_status)) = 'M' THEN 'Married'
             ELSE 'Unknown'
         END AS marital_status,
 
@@ -157,8 +157,8 @@ WITH product_data AS (
     -- Standardize product line values
         CASE
             WHEN TRIM(prd_line) = 'R' THEN 'Road'
-            WHEN TRIM(prd_line) = 'S' THEN 'Other sales'
-            WHEN TRIM(prd_line) = 'M' THEN 'Mountin'
+            WHEN TRIM(prd_line) = 'S' THEN 'Other Sales'
+            WHEN TRIM(prd_line) = 'M' THEN 'Mountain'
             WHEN TRIM(prd_line) = 'T' THEN 'Touring'
             ELSE 'Unknown'
         END AS product_line,
