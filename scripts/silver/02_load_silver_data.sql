@@ -62,11 +62,18 @@ Notes:
 ===============================================================================
 */
 ;
+
+\set ON_ERROR_STOP on
+
+BEGIN;
+
 -- ============================================================================
 -- CRM CUSTOMER
 -- ============================================================================
 
 -- Full refresh: remove previous Silver data before reloading
+SELECT clock_timestamp()::TIMESTAMP AS start_time \gset cust_
+
 TRUNCATE TABLE silver.crm_cust_info;
 
 WITH ranked_customers AS (
@@ -132,11 +139,24 @@ FROM ranked_customers
 -- Keep only the latest record for each customer
 WHERE row_num = 1;
 
+SELECT clock_timestamp()::TIMESTAMP AS end_time \gset cust_
 
+SELECT COUNT(*)::INTEGER AS rows_loaded
+FROM silver.crm_cust_info \gset cust_
+
+CALL audit.log_load(
+    'silver',
+    'crm_cust_info',
+    :'cust_start_time'::TIMESTAMP,
+    :'cust_end_time'::TIMESTAMP,
+    :cust_rows_loaded,
+    'SUCCESS'
+);
 
 -- ============================================================================
 -- CRM PRODUCTS
 -- ============================================================================
+SELECT clock_timestamp()::TIMESTAMP AS start_time \gset prd_
 
 TRUNCATE TABLE silver.crm_prd_info;
 
@@ -199,13 +219,26 @@ SELECT
 FROM 
     product_data;
 
+SELECT clock_timestamp()::TIMESTAMP AS end_time \gset prd_
 
+SELECT COUNT(*)::INTEGER AS rows_loaded
+FROM silver.crm_prd_info \gset prd_
+
+CALL audit.log_load(
+    'silver',
+    'crm_prd_info',
+    :'prd_start_time'::TIMESTAMP,
+    :'prd_end_time'::TIMESTAMP,
+    :prd_rows_loaded,
+    'SUCCESS'
+);
 
 -- ============================================================================
 -- CRM SALES DETAILS
 -- ============================================================================
 
--- Full refresh: remove previous Silver data before reloading
+SELECT clock_timestamp()::TIMESTAMP AS start_time \gset sales_
+
 TRUNCATE TABLE silver.crm_sales_details;
 
 WITH sales_data AS (
@@ -295,12 +328,24 @@ SELECT
 
 FROM sales_data;
 
+SELECT clock_timestamp()::TIMESTAMP AS end_time \gset sales_
 
+SELECT COUNT(*)::INTEGER AS rows_loaded
+FROM silver.crm_sales_details \gset sales_
+
+CALL audit.log_load(
+    'silver',
+    'crm_sales_details',
+    :'sales_start_time'::TIMESTAMP,
+    :'sales_end_time'::TIMESTAMP,
+    :sales_rows_loaded,
+    'SUCCESS'
+);
 -- ============================================================================
 -- ERP CUSTOMER DEMOGRAPHICS
 -- ============================================================================
+SELECT clock_timestamp()::TIMESTAMP AS start_time \gset erp_cust_
 
--- Full refresh: remove previous Silver data before reloading
 TRUNCATE TABLE silver.erp_cust_az12;
 
 WITH customer_data AS (
@@ -335,12 +380,25 @@ SELECT
 
 FROM customer_data;
 
+SELECT clock_timestamp()::TIMESTAMP AS end_time \gset erp_cust_
+
+SELECT COUNT(*)::INTEGER AS rows_loaded
+FROM silver.erp_cust_az12 \gset erp_cust_
+
+CALL audit.log_load(
+    'silver',
+    'erp_cust_az12',
+    :'erp_cust_start_time'::TIMESTAMP,
+    :'erp_cust_end_time'::TIMESTAMP,
+    :erp_cust_rows_loaded,
+    'SUCCESS'
+);
 
 -- ============================================================================
 -- ERP CUSTOMER LOCATION
 -- ============================================================================
+SELECT clock_timestamp()::TIMESTAMP AS start_time \gset erp_loc_
 
--- Full refresh: remove previous Silver data before reloading
 TRUNCATE TABLE silver.erp_loc_a101;
 
 WITH location_data AS (
@@ -374,12 +432,25 @@ SELECT
 
 FROM location_data;
 
+SELECT clock_timestamp()::TIMESTAMP AS end_time \gset erp_loc_
+
+SELECT COUNT(*)::INTEGER AS rows_loaded
+FROM silver.erp_loc_a101 \gset erp_loc_
+
+CALL audit.log_load(
+    'silver',
+    'erp_loc_a101',
+    :'erp_loc_start_time'::TIMESTAMP,
+    :'erp_loc_end_time'::TIMESTAMP,
+    :erp_loc_rows_loaded,
+    'SUCCESS'
+);
 
 -- ============================================================================
 -- ERP PRODUCT CATEGORY
 -- ============================================================================
+SELECT clock_timestamp()::TIMESTAMP AS start_time \gset erp_px_
 
--- Full refresh: remove previous Silver data before reloading
 TRUNCATE TABLE silver.erp_px_cat_g1v2;
 
 WITH category_data AS (
@@ -408,6 +479,19 @@ SELECT
 
 FROM category_data;
 
+SELECT clock_timestamp()::TIMESTAMP AS end_time \gset erp_px_
 
+SELECT COUNT(*)::INTEGER AS rows_loaded
+FROM silver.erp_px_cat_g1v2 \gset erp_px_
 
+CALL audit.log_load(
+    'silver',
+    'erp_px_cat_g1v2',
+    :'erp_px_start_time'::TIMESTAMP,
+    :'erp_px_end_time'::TIMESTAMP,
+    :erp_px_rows_loaded,
+    'SUCCESS'
+);
+
+COMMIT;
 
