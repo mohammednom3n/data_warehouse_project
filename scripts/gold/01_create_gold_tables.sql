@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS gold.dim_products (
 );
 
 -- Create Gold sales fact table
--- Grain = onw row per sales order line
+-- Grain = one row per sales order line
 
 CREATE TABLE IF NOT EXISTS gold.fact_sales (
     order_number TEXT,
@@ -69,5 +69,3 @@ CREATE TABLE IF NOT EXISTS gold.fact_sales (
     PRIMARY KEY (order_number, product_key)
 );
 
-ALTER TABLE silver.erp_cust_az12
-ALTER COLUMN birth_date TYPE DATE;

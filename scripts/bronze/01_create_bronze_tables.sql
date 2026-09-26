@@ -1,9 +1,16 @@
--- =====================================================
--- Bronze Layer: Raw tables
--- Source systems: CRM, ERP
--- Rule: No transformations, TEXT columns only
--- =====================================================
+/*
+===============================================================================
+Script: 01_create_bronze_tables.sql
+Layer: Bronze
+Purpose:
+    Create raw source tables for CRM and ERP data.
 
+Design:
+    - Preserve source values without transformation
+    - Store raw source columns as TEXT
+    - No business constraints or transformations
+===============================================================================
+*/
 
 CREATE TABLE IF NOT EXISTS bronze.crm_cust_info_raw (
     cst_id TEXT,

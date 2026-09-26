@@ -28,7 +28,7 @@ Transformations:
 
 Grain:
     - crm_cust_info: One row per customer
-    - crm_prd_info: One row per product
+    - crm_prd_info: One row per product version
     - crm_sales_details: One row per sales order line
     - erp_cust_az12: One row per ERP customer
     - erp_loc_a101: One row per customer location
@@ -82,7 +82,8 @@ CREATE TABLE IF NOT EXISTS silver.crm_sales_details (
     sales_amount NUMERIC,
     quantity INT,
     sls_price NUMERIC,
-    dwh_create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    dwh_create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (order_number, product_key)
 );
 
 -- ERP CUSTOMERS
