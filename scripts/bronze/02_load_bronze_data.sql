@@ -136,4 +136,3 @@ CALL audit.log_load(
 
 COMMIT;
 
-SELECT * FROM audit.load_log;
