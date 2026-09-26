@@ -21,7 +21,12 @@ Transformations:
 ================================================================================
 */
 
+\set ON_ERROR_STOP on
+
+BEGIN;
+
 -- Load Gold customer dimension
+SELECT clock_timestamp()::TIMESTAMP AS start_time \gset customer_
 
 TRUNCATE TABLE gold.dim_customers;
 
@@ -72,9 +77,22 @@ SELECT
     cst_create_date
 FROM customer;
 
+SELECT clock_timestamp()::TIMESTAMP AS end_time \gset customer_
 
+SELECT COUNT(*)::INTEGER AS rows_loaded
+FROM gold.dim_customers \gset customer_
+
+CALL audit.log_load(
+    'gold',
+    'dim_customers',
+    :'customer_start_time'::TIMESTAMP,
+    :'customer_end_time'::TIMESTAMP,
+    :customer_rows_loaded,
+    'SUCCESS'
+);
 
 -- Load gold product dimension
+SELECT clock_timestamp()::TIMESTAMP AS start_time \gset product_
 
 TRUNCATE TABLE gold.dim_products;
 
@@ -127,8 +145,24 @@ SELECT
     end_date
 FROM product;
 
+SELECT clock_timestamp()::TIMESTAMP AS end_time \gset product_
+
+SELECT COUNT(*)::INTEGER AS rows_loaded
+FROM gold.dim_products \gset product_
+
+CALL audit.log_load(
+    'gold',
+    'dim_products',
+    :'product_start_time'::TIMESTAMP,
+    :'product_end_time'::TIMESTAMP,
+    :product_rows_loaded,
+    'SUCCESS'
+);
+
 
 -- Load gold fact table
+SELECT clock_timestamp()::TIMESTAMP AS start_time \gset sales_
+
 TRUNCATE gold.fact_sales;
 
 INSERT INTO gold.fact_sales (
@@ -155,10 +189,18 @@ SELECT
     sls_price
 FROM silver.crm_sales_details;
 
-SELECT
-    order_number,
-    product_key,
-    COUNT(*)
-FROM silver.crm_sales_details
-GROUP BY order_number, product_key
-HAVING COUNT(*) > 1;
+SELECT clock_timestamp()::TIMESTAMP AS end_time \gset sales_
+
+SELECT COUNT(*)::INTEGER AS rows_loaded
+FROM gold.fact_sales \gset sales_
+
+CALL audit.log_load(
+    'gold',
+    'fact_sales',
+    :'sales_start_time'::TIMESTAMP,
+    :'sales_end_time'::TIMESTAMP,
+    :sales_rows_loaded,
+    'SUCCESS'
+);
+
+COMMIT;
