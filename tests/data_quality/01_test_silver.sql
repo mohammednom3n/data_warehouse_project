@@ -174,6 +174,3 @@ BEGIN
         RAISE EXCEPTION 'Invalid product line found';
     END IF;
 END $$;
-
-SELECT DISTINCT product_line
-FROM silver.crm_prd_info;
