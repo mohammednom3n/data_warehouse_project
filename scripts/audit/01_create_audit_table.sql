@@ -5,6 +5,7 @@ Purpose:
     Store pipeline load history and execution results.
 ================================================================================
 */
+CREATE SCHEMA IF NOT EXISTS audit;
 
 CREATE TABLE IF NOT EXISTS audit.load_log (
     load_id        BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -15,25 +16,4 @@ CREATE TABLE IF NOT EXISTS audit.load_log (
     rows_loaded    INTEGER,
     status         TEXT,
     error_message  TEXT
-);
-
-SELECT *
-FROm audit.load_log
-
-INSERT INTO audit.load_log (
-    layer_name,
-    table_name,
-    start_time,
-    end_time,
-    rows_loaded,
-    status
-    )
-
-VALUES (
-    'Silver',
-    'crm_cust_info',
-    CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP,
-    '15007',
-    'SUCCESS'
 );

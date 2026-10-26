@@ -222,3 +222,5 @@ datasets/
 
 # Draw.io backups
 *.bkp
+
+postgres.session.sql
