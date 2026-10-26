@@ -1,0 +1,3 @@
+\set ON_ERROR_STOP on
+
+SELECT 1 / 0;
